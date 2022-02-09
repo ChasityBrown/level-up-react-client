@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react"
-import { getEvents,deleteEvent } from "./EventManager.js"
+import { getEvents, deleteEvent, leaveEvent, joinEvent } from "./EventManager.js"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 
 export const EventList = (props) => {
@@ -23,6 +23,17 @@ export const EventList = (props) => {
                         <div className="event__game">{event.game.title}</div>
                         <div className="event__description">Description: {event.description} </div>
                         <div>Date: {event.date} Time: {event.time} </div>
+                        {
+                            event.joined ?
+                            <button onClick={() => {leaveEvent(event.id)
+                                .then(getEvents)
+                                .then(res => setEvents(res))
+                            }}>Leave</button>
+                            : <button onClick={() => {joinEvent(event.id)
+                                .then(getEvents)
+                                .then(res => setEvents(res))
+                            }}>Join</button>
+                        }
                         <button onClick={() => {
                     history.push({ pathname: `/events/${event.id}/update` })
                 }}>Edit</button>
